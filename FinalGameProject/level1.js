@@ -1,12 +1,33 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
-let hero = new Hero(0, 0, ctx);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let hero = new Hero(0, canvas.height - 200, ctx);
+
+var keysDown = {};
+
+addEventListener(
+  "keydown",
+  function(e) {
+    keysDown[e.keyCode] = true;
+  },
+  false
+);
+
+addEventListener(
+  "keyup",
+  function(e) {
+    delete keysDown[e.keyCode];
+  },
+  false
+);
 
 let main = () => {
-  ctx.fillRect(0, 0, 500, 500);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   hero.draw();
-  hero.update();
+  hero.update(keysDown);
   requestAnimationFrame(main);
 };
 
