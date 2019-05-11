@@ -14,37 +14,56 @@ class Hero {
 
     this.jumpHeight = this.ground - 220;
     this.jumpState = 0;
+    this.jumpSpeed = 6;
 
-    this.idle = false;
+    this.idle = true;
     this.landed = true;
   }
 
   draw = () => {
-    this.ctx.drawImage(
-      this.img,
-      this.framesCount * this.imgW,
-      0,
-      this.imgW,
-      this.imgH,
-      this.x,
-      this.y,
-      this.imgW,
-      this.imgH
-    );
+    if (this.idle == false || this.landed == false)
+      this.ctx.drawImage(
+        this.img,
+        this.framesCount * this.imgW,
+        0,
+        this.imgW,
+        this.imgH,
+        this.x,
+        this.y,
+        this.imgW,
+        this.imgH
+      );
+    else {
+      this.ctx.drawImage(
+        this.img,
+        0,
+        this.imgH,
+        this.imgW,
+        this.imgH,
+        this.x,
+        this.y,
+        this.imgW,
+        this.imgH
+      );
+    }
   };
   update = keysDown => {
-    this.tickCounter++;
-    if (this.tickCounter > this.ticksPerFrame) {
-      this.tickCounter = 0;
-      this.framesCount++;
-      this.framesCount = this.framesCount % 8;
+    if (this.landed == true && this.idle == false) {
+      this.tickCounter++;
+      if (this.tickCounter > this.ticksPerFrame) {
+        this.tickCounter = 0;
+        this.framesCount++;
+        this.framesCount = this.framesCount % 8;
+      }
     }
-
+    this.idle = true;
     if (37 in keysDown) {
       this.x -= 2;
+      this.idle = false;
     }
     if (39 in keysDown) {
       this.x += 2;
+      this.idle = false;
     }
     if (32 in keysDown && this.landed == true) {
       this.landed = false;
@@ -53,13 +72,16 @@ class Hero {
     /////////////////////////////////////////////////
     //JUMP
     if (this.landed == false) {
+      this.framesCount = 7;
       if (this.jumpState == 0) {
-        if (this.y == this.jumpHeight) this.jumpState = 1;
-        this.y -= 4;
+        if (this.jumpSpeed <= 0) this.jumpState = 1;
+        this.y -= 2 * this.jumpSpeed;
+        this.jumpSpeed -= 0.1;
       }
       if (this.jumpState == 1) {
-        this.y += 4;
-        if (this.y == this.ground) {
+        this.jumpSpeed += 0.1;
+        this.y += 2 * this.jumpSpeed;
+        if (this.y >= this.ground) {
           this.landed = true;
           this.jumpState = 0;
         }
