@@ -5,6 +5,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let hero = new Hero(0, canvas.height - 200, ctx);
+let skeletonBoss = new SkeletonBoss(1400, 200, ctx, hero);
 
 var keysDown = {};
 
@@ -25,8 +26,10 @@ addEventListener(
 );
 
 let main = () => {
+  ctx.fillStyle = "purple";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   hero.draw();
+  skeletonBoss.draw();
   hero.update(keysDown);
   requestAnimationFrame(main);
 };
