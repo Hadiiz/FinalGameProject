@@ -7,6 +7,8 @@ class SkeletonBoss {
     this.eyeCX = this.x + 160;
     this.eyeCY = this.y + 230;
 
+    this.healthBar = 300;
+
     this.img = new Image();
     this.img.src = "./img/SkeletonBoss.png";
     this.imgH = 480;

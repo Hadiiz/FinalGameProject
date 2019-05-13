@@ -6,7 +6,12 @@ canvas.height = window.innerHeight;
 
 let hero = new Hero(0, canvas.height - 200, ctx);
 let skeletonBoss = new SkeletonBoss(1400, 200, ctx, hero);
-
+let interface = new Interface(
+  skeletonBoss.healBar,
+  canvas.width / 2 - 350,
+  60,
+  ctx
+);
 var keysDown = {};
 
 addEventListener(
@@ -25,14 +30,18 @@ addEventListener(
   false
 );
 
+let background = new Image();
+background.src = "./img/background.jpg";
+background.onload = () => {
+  main();
+};
+
 let main = () => {
-  ctx.fillStyle = "purple";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   hero.draw();
   skeletonBoss.draw();
+  interface.draw();
   hero.update(keysDown);
   skeletonBoss.update();
   requestAnimationFrame(main);
 };
-
-main();
