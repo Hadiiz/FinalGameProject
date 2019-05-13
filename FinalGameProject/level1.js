@@ -31,6 +31,7 @@ let main = () => {
   hero.draw();
   skeletonBoss.draw();
   hero.update(keysDown);
+  skeletonBoss.update();
   requestAnimationFrame(main);
 };
 
