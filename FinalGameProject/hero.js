@@ -1,5 +1,7 @@
 class Hero {
   constructor(x, y, ctx) {
+    this.x = x;
+    this.y = y;
     this.ctx = ctx;
     this.img = new Image();
     this.img.src = "./img/hero-Sheet.png";
@@ -8,8 +10,10 @@ class Hero {
     this.framesCount = 0;
     this.tickCounter = 0;
     this.ticksPerFrame = 10;
-    this.x = x;
-    this.y = y;
+
+    this.idleY = 150;
+    this.walkingY = 0;
+
     this.ground = y;
 
     this.jumpHeight = this.ground - 220;
@@ -25,7 +29,7 @@ class Hero {
       this.ctx.drawImage(
         this.img,
         this.framesCount * this.imgW,
-        0,
+        this.walkingY,
         this.imgW,
         this.imgH,
         this.x,
@@ -37,7 +41,7 @@ class Hero {
       this.ctx.drawImage(
         this.img,
         0,
-        this.imgH,
+        this.idleY,
         this.imgW,
         this.imgH,
         this.x,
@@ -60,10 +64,14 @@ class Hero {
     if (37 in keysDown) {
       this.x -= 2;
       this.idle = false;
+      this.walkingY = 300;
+      this.idleY = 450;
     }
     if (39 in keysDown) {
       this.x += 2;
       this.idle = false;
+      this.walkingY = 0;
+      this.idleY = 150;
     }
     if (32 in keysDown && this.landed == true) {
       this.landed = false;
