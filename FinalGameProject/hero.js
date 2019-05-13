@@ -22,9 +22,21 @@ class Hero {
 
     this.idle = true;
     this.landed = true;
+
+    this.fire = true;
+    this.bulletHotSpotX;
+    this.bulletHotSpotY;
+    this.bullet = [];
+    var _this = this;
+    setInterval(function() {
+      _this.fire = true;
+    }, 300);
   }
 
   draw = () => {
+    for (let i = 0; i < this.bullet.length; i++) {
+      this.bullet[i].draw();
+    }
     if (this.idle == false || this.landed == false)
       this.ctx.drawImage(
         this.img,
@@ -52,6 +64,8 @@ class Hero {
     }
   };
   update = keysDown => {
+    ////////////////////////////////////////////////////////////////////////////////
+
     if (this.landed == true && this.idle == false) {
       this.tickCounter++;
       if (this.tickCounter > this.ticksPerFrame) {
@@ -60,6 +74,9 @@ class Hero {
         this.framesCount = this.framesCount % 8;
       }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //Walk
     this.idle = true;
     if (37 in keysDown) {
       this.x -= 2;
@@ -76,7 +93,18 @@ class Hero {
     if (32 in keysDown && this.landed == true) {
       this.landed = false;
     }
+    ////////////////////////////////////////////////////////////////////////////////
+    //Bullet
 
+    if (90 in keysDown && this.fire == true) {
+      this.bulletHotSpotX = this.x + 95;
+      this.bulletHotSpotY = this.y + 30;
+      this.bullet.push(
+        new HeroBullet(this.bulletHotSpotX, this.bulletHotSpotY, this.ctx)
+      );
+      this.fire = false;
+    }
+    // console.log(this.fire);
     /////////////////////////////////////////////////
     //JUMP
     if (this.landed == false) {
@@ -94,6 +122,10 @@ class Hero {
           this.jumpState = 0;
         }
       }
+    }
+
+    for (let i = 0; i < this.bullet.length; i++) {
+      this.bullet[i].update();
     }
   };
 }
