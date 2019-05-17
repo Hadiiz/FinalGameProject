@@ -3,6 +3,7 @@ class Hero {
     this.x = x;
     this.y = y;
     this.ctx = ctx;
+
     this.img = new Image();
     this.img.src = "./img/hero-Sheet.png";
     this.imgH = 150;
@@ -31,6 +32,8 @@ class Hero {
     setInterval(function() {
       _this.fire = true;
     }, 300);
+
+    this.lives = 4;
   }
 
   draw = () => {

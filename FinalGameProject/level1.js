@@ -48,7 +48,8 @@ let main = () => {
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   hero.draw();
   skeletonBoss.draw();
-  interface.draw();
+  interface.drawBossHealthBar();
+  interface.drawHeroHeart(hero.lives);
   hero.update(keysDown, delta / 1000);
   skeletonBoss.update();
 
