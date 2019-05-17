@@ -18,7 +18,7 @@ class Hero {
 
     this.jumpHeight = this.ground - 220;
     this.jumpState = 0;
-    this.jumpSpeed = 6;
+    this.jumpSpeed = 800;
 
     this.idle = true;
     this.landed = true;
@@ -63,7 +63,7 @@ class Hero {
       );
     }
   };
-  update = keysDown => {
+  update = (keysDown, modifier) => {
     ////////////////////////////////////////////////////////////////////////////////
 
     if (this.landed == true && this.idle == false) {
@@ -111,12 +111,13 @@ class Hero {
       this.framesCount = 7;
       if (this.jumpState == 0) {
         if (this.jumpSpeed <= 0) this.jumpState = 1;
-        this.y -= 2 * this.jumpSpeed;
-        this.jumpSpeed -= 0.1;
+        this.y -= 2 * this.jumpSpeed * modifier;
+        this.jumpSpeed -= 10;
+        console.log(this.jumpSpeed);
       }
       if (this.jumpState == 1) {
-        this.jumpSpeed += 0.1;
-        this.y += 2 * this.jumpSpeed;
+        this.jumpSpeed += 10;
+        this.y += 2 * this.jumpSpeed * modifier;
         if (this.y >= this.ground) {
           this.landed = true;
           this.jumpState = 0;

@@ -30,18 +30,25 @@ addEventListener(
   false
 );
 
+var then;
+
 let background = new Image();
 background.src = "./img/background.jpg";
 background.onload = () => {
+  then = Date.now();
   main();
 };
 
 let main = () => {
+  let now = Date.now();
+  let delta = now - then;
   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   hero.draw();
   skeletonBoss.draw();
   interface.draw();
-  hero.update(keysDown);
+  hero.update(keysDown, delta / 1000);
   skeletonBoss.update();
+
+  then = now;
   requestAnimationFrame(main);
 };
