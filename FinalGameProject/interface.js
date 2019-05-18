@@ -5,6 +5,8 @@ class Interface {
     this.BHBY = BHBY;
     this.ctx = ctx;
 
+    this.bossHealthW = 700;
+
     this.bossHBImg = new Image();
     this.bossHBImg.src = "./img/bossHB.png";
     this.heroHeartImg = new Image();
@@ -13,11 +15,11 @@ class Interface {
 
   drawBossHealthBar = () => {
     this.ctx.fillStyle = "#ad0000";
-    this.ctx.fillRect(this.BHBX, this.BHBY, 700, 30);
+    this.ctx.fillRect(this.BHBX, this.BHBY, this.bossHealthW, 30);
     this.ctx.fillStyle = "#860000";
-    this.ctx.fillRect(this.BHBX, this.BHBY + 18, 700, 12);
+    this.ctx.fillRect(this.BHBX, this.BHBY + 18, this.bossHealthW, 12);
     this.ctx.fillStyle = "#be2000";
-    this.ctx.fillRect(this.BHBX, this.BHBY, 700, 3);
+    this.ctx.fillRect(this.BHBX, this.BHBY, this.bossHealthW, 3);
 
     this.ctx.drawImage(this.bossHBImg, this.BHBX - 45, this.BHBY - 10);
   };
@@ -28,5 +30,9 @@ class Interface {
       this.ctx.drawImage(this.heroHeartImg, x, 30);
       x += 30;
     }
+  };
+
+  updateBossHealth = () => {
+    this.bossHealthW -= 11.66;
   };
 }

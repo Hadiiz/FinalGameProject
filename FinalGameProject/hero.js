@@ -28,10 +28,11 @@ class Hero {
     this.bulletHotSpotX;
     this.bulletHotSpotY;
     this.bullet = [];
+    this.deleted = [];
     var _this = this;
     setInterval(function() {
       _this.fire = true;
-    }, 300);
+    }, 600);
 
     this.lives = 4;
   }
@@ -107,7 +108,6 @@ class Hero {
       );
       this.fire = false;
     }
-    // console.log(this.fire);
     /////////////////////////////////////////////////
     //JUMP
     if (this.landed == false) {
@@ -116,7 +116,6 @@ class Hero {
         if (this.jumpSpeed <= 0) this.jumpState = 1;
         this.y -= 2 * this.jumpSpeed * modifier;
         this.jumpSpeed -= 10;
-        console.log(this.jumpSpeed);
       }
       if (this.jumpState == 1) {
         this.jumpSpeed += 10;
@@ -130,6 +129,11 @@ class Hero {
 
     for (let i = 0; i < this.bullet.length; i++) {
       this.bullet[i].update();
+    }
+
+    for (let i = 0; i < this.deleted.length; i++) {
+      let index = this.bullet.indexOf(this.deleted[i]);
+      if (index > -1) this.bullet.splice(index, 1);
     }
   };
 }
