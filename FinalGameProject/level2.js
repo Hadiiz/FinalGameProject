@@ -132,12 +132,12 @@ class boss {
 
     if (this.hori == true) {
       if (this.top == true) {
-        this.y--;
+        this.y -= 1;
         if (this.y <= 0) {
           this.bottom = true;
           this.top = false;
         }
-        if (this.y == 350) {
+        if (this.y == 370) {
           this.forward = true;
           this.change = true;
           this.hori = false;
@@ -200,6 +200,9 @@ class boss {
       70,
       20
     );
+    if (this.collide == true) {
+      hero.shoot.collide = true;
+    }
     //Boss colllide with Hero
     this.collide2 = collision(
       this.x + 120,
@@ -211,9 +214,9 @@ class boss {
       hero.x + 45,
       hero.imgH - 35
     );
-    if (this.collide == true) {
-      hero.shoot.collide = true;
-      this.health -= 5;
+    if (this.collide2 == true) {
+      if (hero.shield != 0) hero.shield -= 50;
+      else hero.life2 -= 50;
     }
     //Hero Collide with fireBall
     var fireIndex = 0;
@@ -232,7 +235,8 @@ class boss {
         );
         if (this.collide3 == true) {
           deletearray.push(sprites[i]);
-          this.health -= 5;
+          if (hero.shield != 0) hero.shield -= 15;
+          else hero.life2 -= 15;
         }
       }
     }

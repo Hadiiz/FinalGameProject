@@ -5,7 +5,6 @@ class Hero {
     this.x = x;
     this.y = y;
     this.ctx = ctx;
-
     this.img = new Image();
     this.img.src = "./img/hero-Sheet.png";
     this.imgH = 150;
@@ -30,6 +29,12 @@ class Hero {
     this.bullet = [];
     this.sprites1 = [];
     this.deleted = [];
+    this.life2 = 200;
+    this.life2Ima = new Image();
+    this.life2Ima.src = "./img/HeroHeart.png";
+    this.shield = 200;
+    this.shieldImg = new Image();
+    this.shieldImg.src = "./img/shield.jpg";
     var _this = this;
     setInterval(function() {
       _this.fire = true;
@@ -67,6 +72,13 @@ class Hero {
         this.imgH
       );
     }
+
+    drawrect(ctx, "black", 580, 700, 200, 20, "black");
+    drawrect(ctx, "blue", 580, 700, this.shield, 20, "blue");
+    this.ctx.drawImage(this.shieldImg, 580, 700, 20, 20);
+    drawrect(ctx, "black", 580, 725, 200, 20, "black");
+    drawrect(ctx, "green", 580, 725, this.life2, 20, "green");
+    this.ctx.drawImage(this.life2Ima, 560, 710, 50, 50);
   };
   update = (keysDown, modifier) => {
     ////////////////////////////////////////////////////////////////////////////////
