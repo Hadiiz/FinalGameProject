@@ -189,7 +189,7 @@ class boss {
         this.framesCount = 0;
       }
     }
-    //Boss collide with laze
+    //Boss collide with lazer
     this.collide = collision(
       this.x + 120,
       this.y + 60,
