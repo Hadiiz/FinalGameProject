@@ -19,7 +19,7 @@ class Hero {
 
     this.jumpHeight = this.ground - 220;
     this.jumpState = 0;
-    this.jumpSpeed = 800;
+    this.jumpSpeed = 6;
 
     this.idle = true;
     this.landed = true;
@@ -34,7 +34,7 @@ class Hero {
       _this.fire = true;
     }, 600);
 
-    this.lives = 4;
+    this.lives = 5;
   }
 
   draw = () => {
@@ -67,7 +67,7 @@ class Hero {
       );
     }
   };
-  update = (keysDown, modifier) => {
+  update = keysDown => {
     ////////////////////////////////////////////////////////////////////////////////
 
     if (this.landed == true && this.idle == false) {
@@ -114,12 +114,12 @@ class Hero {
       this.framesCount = 7;
       if (this.jumpState == 0) {
         if (this.jumpSpeed <= 0) this.jumpState = 1;
-        this.y -= 2 * this.jumpSpeed * modifier;
-        this.jumpSpeed -= 10;
+        this.y -= 2 * this.jumpSpeed;
+        this.jumpSpeed -= 0.1;
       }
       if (this.jumpState == 1) {
-        this.jumpSpeed += 10;
-        this.y += 2 * this.jumpSpeed * modifier;
+        this.jumpSpeed += 0.1;
+        this.y += 2 * this.jumpSpeed;
         if (this.y >= this.ground) {
           this.landed = true;
           this.jumpState = 0;
