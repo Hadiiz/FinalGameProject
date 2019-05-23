@@ -50,10 +50,9 @@ let main = () => {
   skeletonBoss.draw();
   interface.drawBossHealthBar();
   interface.drawHeroHeart(hero.lives);
-  hero.update(keysDown, delta / 1000);
+  hero.update(keysDown);
   skeletonBoss.update();
   checkForCollision(hero.bullet, skeletonBoss);
-  // console.log(skeletonBoss.healthBar);
 
   then = now;
   requestAnimationFrame(main);
