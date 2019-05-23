@@ -42,7 +42,7 @@ class background {
     ctx.drawImage(this.BackgroundImage, 0, 0, canvas.width, canvas.height);
   }
 }
-let hero = new Hero(0, canvas.height - 200, ctx);
+let hero = new Hero(0, canvas.height - 250, ctx);
 
 class Fire {
   x = 0;
@@ -79,6 +79,8 @@ class boss {
   counter2 = 0;
   counter3 = 0;
   counter4 = 0;
+  counter5 = 0;
+  counter6 = 0;
   top = true;
   bottom = false;
   forward = false;
@@ -89,6 +91,7 @@ class boss {
   collide = false;
   collid2 = false;
   collide3 = false;
+  change2 = true;
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -151,7 +154,7 @@ class boss {
         }
       }
     }
-    if (this.forward == true) {
+    if (this.forward == true && this.health > 0) {
       if (this.change == true) {
         this.imgy += 320;
         this.framesCount = 3;
@@ -170,7 +173,25 @@ class boss {
       this.counter4++;
       this.x -= 10;
     }
+    if (this.health <= 0) {
+      this.health = 0;
+      if (this.change2 == true) {
+        this.imgy = 640;
+        this.framesCount = 2;
+        this.change2 = false;
+      }
+      if (this.counter5 == 9) {
+        this.framesCount = 2;
+        this.counter5 = 0;
+      }
 
+      if (this.counter6 == 30) {
+        this.framesCount++;
+        this.counter5++;
+        this.counter6 = 0;
+      }
+      this.counter6++;
+    }
     if (this.x <= 0) {
       this.framescount = 1;
       this.imgy = 0;
@@ -202,6 +223,7 @@ class boss {
     );
     if (this.collide == true) {
       hero.shoot.collide = true;
+      this.health -= 5;
     }
     //Boss colllide with Hero
     this.collide2 = collision(
@@ -214,9 +236,12 @@ class boss {
       hero.x + 45,
       hero.imgH - 35
     );
+    if (hero.shield < 0) {
+      hero.shield = 0;
+    }
     if (this.collide2 == true) {
-      if (hero.shield != 0) hero.shield -= 50;
-      else hero.life2 -= 50;
+      if (hero.shield != 0) hero.shield -= 4;
+      else hero.life2 -= 4;
     }
     //Hero Collide with fireBall
     var fireIndex = 0;
@@ -242,33 +267,42 @@ class boss {
     }
   }
 }
-
+var gameOver = new Image();
+gameOver.src = "./gameover.jpg";
 let Boss = new boss(1000, 300);
 let Background = new background();
-
+var GameOver = false;
 var then = Date.now();
 var main = function() {
-  let now = Date.now();
-  let delta = now - then;
+  if (GameOver == false) {
+    let now = Date.now();
+    let delta = now - then;
 
-  Background.draw();
-  hero.draw();
-  hero.update(keysDown, delta / 1000);
-  Boss.draw();
-  Boss.update();
+    Background.draw();
+    hero.draw();
+    hero.update(keysDown, delta / 1000);
+    Boss.draw();
+    Boss.update();
 
-  for (var i = 0; i < sprites.length; i++) {
-    sprites[i].update(hero.x, hero.y);
-    sprites[i].draw();
+    for (var i = 0; i < sprites.length; i++) {
+      sprites[i].update(hero.x, hero.y);
+      sprites[i].draw();
+    }
+    //deleting unused sprites member
+    for (var j = 0; j < deletearray.length; j++) {
+      var indexof = sprites.indexOf(deletearray[j]);
+      sprites.splice(indexof, 1);
+    }
+    //emptying the delete array
+    deletearray = [];
+    then = now;
+    if (hero.life2 <= 0) {
+      GameOver = true;
+    }
   }
-  //deleting unused sprites member
-  for (var j = 0; j < deletearray.length; j++) {
-    var indexof = sprites.indexOf(deletearray[j]);
-    sprites.splice(indexof, 1);
+  if (GameOver == true) {
+    ctx.drawImage(gameOver, 0, 0, canvas.width, canvas.height);
   }
-  //emptying the delete array
-  deletearray = [];
-  then = now;
   requestAnimationFrame(main);
 };
 var w = window;

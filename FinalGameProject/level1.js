@@ -16,7 +16,10 @@ let interface = new Interface(
 let deleted = [];
 
 var keysDown = {};
-
+var backgroundmenu = new Image();
+backgroundmenu.src = "./img/MenuBackground.jpg";
+var exitBackground = new Image();
+exitBackground.src = "./img/exit.png";
 addEventListener(
   "keydown",
   function(e) {
@@ -41,20 +44,59 @@ background.onload = () => {
   then = Date.now();
   main();
 };
-
+var chosen = false;
+var exit = false;
+var gameOver = new Image();
+gameOver.src = "./gameover.jpg";
+var GameOver = false;
 let main = () => {
-  let now = Date.now();
-  let delta = now - then;
-  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-  hero.draw();
-  skeletonBoss.draw();
-  interface.drawBossHealthBar();
-  interface.drawHeroHeart(hero.lives);
-  hero.update(keysDown);
-  skeletonBoss.update();
-  checkForCollision(hero.bullet, skeletonBoss);
+  if (GameOver == false) {
+    if (chosen == false) {
+      ctx.drawImage(backgroundmenu, 0, 0, canvas.width, canvas.height);
+      //taking input from the mouse
+      addEventListener("click", options, false);
+      //assigning option of user
+      function options(ev) {
+        var x = ev.clientX - canvas.offsetLeft;
+        var y = ev.clientY - canvas.offsetTop;
+        console.log("x:" + x);
+        console.log("y:" + y);
+        //starting game
+        if (x >= 56 && x < 454 && y >= 105 && y < 267) {
+          chosen = true;
+          removeEventListener("click", options, false);
+        } else if (x >= 77 && x < 458 && y >= 495 && y < 596) {
+          chosen = true;
+          exit = true;
+        }
+      }
+    }
+    if (chosen == true && exit == false) {
+      let now = Date.now();
+      let delta = now - then;
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      hero.draw();
+      skeletonBoss.draw();
+      interface.drawBossHealthBar();
+      interface.drawHeroHeart(hero.lives);
+      hero.update(keysDown, delta / 1000);
+      skeletonBoss.update();
+      checkForCollision(hero.bullet, skeletonBoss);
+      // console.log(skeletonBoss.healthBar);
+      then = now;
+    }
+    if (exit == true) {
+      removeEventListener("click", options, false);
+      ctx.drawImage(exitBackground, 0, 0, canvas.width, canvas.height);
+    }
+    if (hero.lives == 0) {
+      GameOver = true;
+    }
+  }
+  if (GameOver == true) {
+    ctx.drawImage(gameOver, 0, 0, canvas.width, canvas.height);
+  }
 
-  then = now;
   requestAnimationFrame(main);
 };
 
