@@ -27,7 +27,7 @@ class Level2 {
     this.deletearray = [];
     this.enemysprites = [];
     this.enemydeletearray = [];
-    this.hero = new Hero(0, this.canvas.height - 250, this.ctx, 2);
+    this.hero = new Hero(0, this.canvas.height - 250, this.ctx, 2, this.canvas);
     this.gameOver = new Image();
     this.gameOver.src = "img/gameover.jpg";
     this.Victory = new Image();
@@ -85,5 +85,12 @@ class Level2 {
         this.canvas.height
       );
     }
+    //deleting unused sprites member
+    for (var j = 0; j < this.Boss.deletearray.length; j++) {
+      var indexof = this.Boss.sprites.indexOf(this.Boss.deletearray[j]);
+      this.Boss.sprites.splice(indexof, 1);
+    }
+    //emptying the delete array
+    this.Boss.deletearray = [];
   };
 }

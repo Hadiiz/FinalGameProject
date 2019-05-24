@@ -1,7 +1,8 @@
 var deletearray1 = [];
 var start2 = true;
 class Hero {
-  constructor(x, y, ctx, level) {
+  constructor(x, y, ctx, level, canvas) {
+    this.canvas = canvas;
     this.x = x;
     this.y = y;
     this.ctx = ctx;
@@ -31,6 +32,11 @@ class Hero {
     this.bulletHotSpotX;
     this.bulletHotSpotY;
     this.bullet = [];
+    this.laser1Sound = new Audio("audio/laser1.mp3");
+    this.laser1Sound.volume = 0.1;
+
+    this.laser2Sound = new Audio("audio/laser2.mp3");
+    this.laser2Sound.volume = 0.4;
 
     this.sprites1 = [];
     this.deleted = [];
@@ -104,13 +110,13 @@ class Hero {
     ////////////////////////////////////////////////////////////////////////////////
     //Walk
     this.idle = true;
-    if (37 in keysDown) {
+    if (37 in keysDown && this.x > 0) {
       this.x -= 2;
       this.idle = false;
       this.walkingY = 300;
       this.idleY = 450;
     }
-    if (39 in keysDown) {
+    if (39 in keysDown && this.x < this.canvas.width - 550) {
       this.x += 2;
       this.idle = false;
       this.walkingY = 0;
@@ -128,11 +134,13 @@ class Hero {
         this.bullet.push(
           new HeroBullet(this.bulletHotSpotX, this.bulletHotSpotY, this.ctx)
         );
+        this.laser1Sound.play();
         this.fire = false;
       }
     } else if (this.level == 2) {
       if (90 in keysDown) {
         if (start2 == true) {
+          this.laser2Sound.play();
           this.shoot = new Laser(this.x, this.y, "level2", this.ctx);
           this.sprites1.push(this.shoot);
           delete keysDown[90];

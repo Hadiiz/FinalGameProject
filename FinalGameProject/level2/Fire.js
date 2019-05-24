@@ -11,6 +11,9 @@ class Fire {
     this.name = name;
     this.ctx = ctx;
     this.deletearray = deletearray;
+    this.fireBallAudio = new Audio("audio/Boss2FireBall.mp3");
+    this.fireBallAudio.volume = 0.3;
+    this.fireBallAudio.play();
   }
   draw() {
     this.ctx.drawImage(this.fire, this.x, this.y, 55, 55);

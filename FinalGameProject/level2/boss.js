@@ -52,6 +52,7 @@ class boss {
     );
   }
   update() {
+    console.log(this.deletearray);
     if (this.hori == true) {
       if (this.counter2 == 9) {
         this.framesCount = 0;
