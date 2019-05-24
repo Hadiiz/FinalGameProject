@@ -10,7 +10,7 @@ class SkeletonBoss {
     this.healthBar = 300;
 
     this.img = new Image();
-    this.img.src = "./img/SkeletonBoss.png";
+    this.img.src = "img/SkeletonBoss.png";
     this.imgH = 480;
     this.imgW = 480;
     this.framesCount = 0;
