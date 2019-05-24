@@ -36,7 +36,7 @@ addEventListener(
 let level1 = new Level1(ctx, canvas, keysDown);
 let level2 = new Level2(ctx, canvas, keysDown);
 
-let level = 1;
+let level = 2;
 let main = () => {
   if (level == 1) {
     level1.main();

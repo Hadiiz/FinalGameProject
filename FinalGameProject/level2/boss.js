@@ -24,6 +24,7 @@ class boss {
   collid2 = false;
   collide3 = false;
   change2 = true;
+  victory = false;
   constructor(x, y, hero, sprites, deletearray, ctx) {
     this.ctx = ctx;
     this.deletearray = deletearray;
@@ -125,6 +126,7 @@ class boss {
       if (this.counter5 == 9) {
         this.framesCount = 2;
         this.counter5 = 0;
+        this.victory = true;
       }
 
       if (this.counter6 == 30) {

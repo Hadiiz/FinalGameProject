@@ -30,6 +30,8 @@ class Level2 {
     this.hero = new Hero(0, this.canvas.height - 250, this.ctx, 2);
     this.gameOver = new Image();
     this.gameOver.src = "img/gameover.jpg";
+    this.Victory = new Image();
+    this.Victory.src = "img/victory2.jpg";
     this.Boss = new boss(
       1000,
       300,
@@ -42,7 +44,7 @@ class Level2 {
     this.GameOver = false;
   }
   main = () => {
-    if (this.GameOver == false) {
+    if (this.GameOver == false && this.Boss.victory == false) {
       this.Background.draw();
       this.hero.draw();
       this.hero.update(this.keysDown);
@@ -68,6 +70,15 @@ class Level2 {
     if (this.GameOver == true) {
       this.ctx.drawImage(
         this.gameOver,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+    }
+    if (this.Boss.victory == true) {
+      this.ctx.drawImage(
+        this.Victory,
         0,
         0,
         this.canvas.width,
