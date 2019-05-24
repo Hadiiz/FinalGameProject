@@ -1,18 +1,21 @@
 var deletearray1 = [];
 var start2 = true;
 class Hero {
-  constructor(x, y, ctx) {
+  constructor(x, y, ctx, level) {
     this.x = x;
     this.y = y;
     this.ctx = ctx;
+    this.level = level;
+
     this.img = new Image();
-    this.img.src = "./img/hero-Sheet.png";
+    this.img.src = "img/hero-Sheet.png";
     this.imgH = 150;
     this.imgW = 200;
+
     this.framesCount = 0;
     this.tickCounter = 0;
     this.ticksPerFrame = 10;
-    this.level2 = true;
+
     this.idleY = 150;
     this.walkingY = 0;
     this.level1 = false;
@@ -28,14 +31,16 @@ class Hero {
     this.bulletHotSpotX;
     this.bulletHotSpotY;
     this.bullet = [];
+
     this.sprites1 = [];
     this.deleted = [];
+
     this.life2 = 200;
     this.life2Ima = new Image();
-    this.life2Ima.src = "./img/HeroHeart.png";
+    this.life2Ima.src = "img/HeroHeart.png";
     this.shield = 200;
     this.shieldImg = new Image();
-    this.shieldImg.src = "./img/shield.jpg";
+    this.shieldImg.src = "img/shield.jpg";
     var _this = this;
     setInterval(function() {
       _this.fire = true;
@@ -45,9 +50,10 @@ class Hero {
   }
 
   draw = () => {
-    for (let i = 0; i < this.bullet.length; i++) {
-      this.bullet[i].draw();
-    }
+    if (this.level == 1)
+      for (let i = 0; i < this.bullet.length; i++) {
+        this.bullet[i].draw();
+      }
     if (this.idle == false || this.landed == false)
       this.ctx.drawImage(
         this.img,
@@ -74,12 +80,14 @@ class Hero {
       );
     }
 
-    drawrect(ctx, "black", 580, 700, 200, 20, "black");
-    drawrect(ctx, "blue", 580, 700, this.shield, 20, "blue");
-    this.ctx.drawImage(this.shieldImg, 580, 700, 20, 20);
-    drawrect(ctx, "black", 580, 725, 200, 20, "black");
-    drawrect(ctx, "green", 580, 725, this.life2, 20, "green");
-    this.ctx.drawImage(this.life2Ima, 560, 710, 50, 50);
+    if (this.level == 2) {
+      drawrect(ctx, "black", 580, 700, 200, 20, "black");
+      drawrect(ctx, "blue", 580, 700, this.shield, 20, "blue");
+      this.ctx.drawImage(this.shieldImg, 580, 700, 20, 20);
+      drawrect(ctx, "black", 580, 725, 200, 20, "black");
+      drawrect(ctx, "green", 580, 725, this.life2, 20, "green");
+      this.ctx.drawImage(this.life2Ima, 560, 710, 50, 50);
+    }
   };
   update = keysDown => {
     ////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +121,7 @@ class Hero {
     }
     ////////////////////////////////////////////////////////////////////////////////
     //Bullet
-    if (this.level1 == true) {
+    if (this.level == 1) {
       if (90 in keysDown && this.fire == true) {
         this.bulletHotSpotX = this.x + 95;
         this.bulletHotSpotY = this.y + 30;
@@ -122,8 +130,7 @@ class Hero {
         );
         this.fire = false;
       }
-    }
-    if (this.level2 == true) {
+    } else if (this.level == 2) {
       if (90 in keysDown) {
         if (start2 == true) {
           this.shoot = new Laser(this.x, this.y, "level2", this.ctx);
@@ -163,20 +170,23 @@ class Hero {
       }
     }
 
-    for (let i = 0; i < this.bullet.length; i++) {
-      this.bullet[i].update(this.x, this.y);
-    }
-    for (let i = 0; i < this.sprites1.length; i++) {
-      this.sprites1[i].update(this.x, this.y);
-      if (this.sprites1[i].coolingdown == false) this.sprites1[i].draw();
-    }
-    for (var j = 0; j < deletearray1.length; j++) {
-      var indexof = this.sprites1.indexOf(deletearray1[j]);
-      this.sprites1.splice(indexof, 1);
-    }
-    //emptying the delete array
-    deletearray1 = [];
+    if (this.level == 1)
+      for (let i = 0; i < this.bullet.length; i++) {
+        this.bullet[i].update(this.x, this.y);
+      }
 
+    if (this.level == 2) {
+      for (let i = 0; i < this.sprites1.length; i++) {
+        this.sprites1[i].update(this.x, this.y);
+        if (this.sprites1[i].coolingdown == false) this.sprites1[i].draw();
+      }
+      for (var j = 0; j < deletearray1.length; j++) {
+        var indexof = this.sprites1.indexOf(deletearray1[j]);
+        this.sprites1.splice(indexof, 1);
+      }
+      //emptying the delete array
+      deletearray1 = [];
+    }
     for (let i = 0; i < this.deleted.length; i++) {
       let index = this.bullet.indexOf(this.deleted[i]);
       if (index > -1) this.bullet.splice(index, 1);
@@ -201,7 +211,7 @@ class Laser {
     this.ctx = ctx;
   }
   draw() {
-    this.laserImage.src = "./laser.png";
+    this.laserImage.src = "img/laser.png";
     this.ctx.drawImage(
       this.laserImage,
       this.x + 100,

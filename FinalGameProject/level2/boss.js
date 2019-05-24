@@ -1,71 +1,3 @@
-var canvas = document.createElement("canvas");
-var ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-document.body.appendChild(canvas);
-var keysDown = {};
-addEventListener(
-  "keydown",
-  function(e) {
-    keysDown[e.keyCode] = true;
-  },
-  false
-);
-addEventListener(
-  "keyup",
-  function(e) {
-    delete keysDown[e.keyCode];
-  },
-  false
-);
-var sprites = [];
-var deletearray = [];
-var enemysprites = [];
-var enemydeletearray = [];
-function drawrect(context, color, x, y, length, height, col2) {
-  context.beginPath();
-  context.fillStyle = color;
-  context.fillRect(x, y, length, height);
-  context.lineWidth = 4;
-  context.strokeStyle = col2;
-  context.stroke();
-}
-function collision(x1, y1, h1, w1, x2, y2, h2, w2) {
-  if (x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2) return true;
-}
-class background {
-  BackgroundImage = new Image();
-  draw() {
-    this.BackgroundImage.src = "./Background.jpg";
-    ctx.drawImage(this.BackgroundImage, 0, 0, canvas.width, canvas.height);
-  }
-}
-let hero = new Hero(0, canvas.height - 250, ctx);
-
-class Fire {
-  x = 0;
-  y = 0;
-  name = " ";
-  fire = new Image();
-  constructor(x, y, name) {
-    this.x = x;
-    this.y = y;
-    this.name = name;
-  }
-  draw() {
-    this.fire.src = "./fireball.png";
-    ctx.drawImage(this.fire, this.x, this.y, 55, 55);
-  }
-  update() {
-    this.x -= 5;
-    if (this.x < 0) {
-      deletearray.push(this);
-    }
-  }
-}
-
 class boss {
   x = 0;
   y = 0;
@@ -92,12 +24,16 @@ class boss {
   collid2 = false;
   collide3 = false;
   change2 = true;
-  constructor(x, y) {
+  constructor(x, y, hero, sprites, deletearray, ctx) {
+    this.ctx = ctx;
+    this.deletearray = deletearray;
     this.x = x;
     this.y = y;
+    this.hero = hero;
+    this.sprites = sprites;
   }
   draw() {
-    this.bossImage.src = "./Enemy.png";
+    this.bossImage.src = "img/Enemy.png";
     drawrect(ctx, "black", 200, 50, 1000, 20, "black");
     drawrect(ctx, "red", 200, 50, this.health, 20, "red");
     ctx.drawImage(this.bossImage, 0, 0, 320, 320, 120, 10, 80, 80);
@@ -126,8 +62,14 @@ class boss {
         this.counter2 += 1;
       }
       if (this.counter2 == 8) {
-        let fire = new Fire(this.x + 120, this.y + 200, "enemy");
-        sprites.push(fire);
+        let fire = new Fire(
+          this.x + 120,
+          this.y + 200,
+          "enemy",
+          this.ctx,
+          this.deletearray
+        );
+        this.sprites.push(fire);
         this.counter2++;
       }
       this.counter++;
@@ -216,13 +158,13 @@ class boss {
       this.y + 60,
       120,
       200,
-      hero.x + hero.shoot.width + 20,
-      hero.shoot.y + 30,
+      this.hero.x + this.hero.shoot.width + 20,
+      this.hero.shoot.y + 30,
       70,
       20
     );
     if (this.collide == true) {
-      hero.shoot.collide = true;
+      this.hero.shoot.collide = true;
       this.health -= 5;
     }
     //Boss colllide with Hero
@@ -231,84 +173,39 @@ class boss {
       this.y + 60,
       120,
       200,
-      hero.x + 85,
-      hero.y + 20,
-      hero.x + 45,
-      hero.imgH - 35
+      this.hero.x + 85,
+      this.hero.y + 20,
+      this.hero.x + 45,
+      this.hero.imgH - 35
     );
-    if (hero.shield < 0) {
-      hero.shield = 0;
+    if (this.hero.shield < 0) {
+      this.hero.shield = 0;
     }
     if (this.collide2 == true) {
-      if (hero.shield != 0) hero.shield -= 4;
-      else hero.life2 -= 4;
+      if (this.hero.shield != 0) this.hero.shield -= 4;
+      else this.hero.life2 -= 4;
     }
     //Hero Collide with fireBall
     var fireIndex = 0;
-    for (var i = 0; i < sprites.length; i++) {
-      if (sprites[i].name == "enemy") {
+    for (var i = 0; i < this.sprites.length; i++) {
+      if (this.sprites[i].name == "enemy") {
         fireIndex = i;
         this.collide3 = collision(
-          hero.x,
-          hero.y + 20,
-          hero.x + 125,
-          hero.imgH - 35,
-          sprites[fireIndex].x,
-          sprites[fireIndex].y,
+          this.hero.x,
+          this.hero.y + 20,
+          this.hero.x + 125,
+          this.hero.imgH - 35,
+          this.sprites[fireIndex].x,
+          this.sprites[fireIndex].y,
           55,
           55
         );
         if (this.collide3 == true) {
-          deletearray.push(sprites[i]);
-          if (hero.shield != 0) hero.shield -= 15;
-          else hero.life2 -= 15;
+          this.deletearray.push(this.sprites[i]);
+          if (this.hero.shield != 0) this.hero.shield -= 15;
+          else this.hero.life2 -= 15;
         }
       }
     }
   }
 }
-var gameOver = new Image();
-gameOver.src = "./gameover.jpg";
-let Boss = new boss(1000, 300);
-let Background = new background();
-var GameOver = false;
-var then = Date.now();
-var main = function() {
-  if (GameOver == false) {
-    let now = Date.now();
-    let delta = now - then;
-
-    Background.draw();
-    hero.draw();
-    hero.update(keysDown, delta / 1000);
-    Boss.draw();
-    Boss.update();
-
-    for (var i = 0; i < sprites.length; i++) {
-      sprites[i].update(hero.x, hero.y);
-      sprites[i].draw();
-    }
-    //deleting unused sprites member
-    for (var j = 0; j < deletearray.length; j++) {
-      var indexof = sprites.indexOf(deletearray[j]);
-      sprites.splice(indexof, 1);
-    }
-    //emptying the delete array
-    deletearray = [];
-    then = now;
-    if (hero.life2 <= 0) {
-      GameOver = true;
-    }
-  }
-  if (GameOver == true) {
-    ctx.drawImage(gameOver, 0, 0, canvas.width, canvas.height);
-  }
-  requestAnimationFrame(main);
-};
-var w = window;
-requestAnimationFrame =
-  w.requestAnimationFrame ||
-  w.webkitRequestAnimationFrame ||
-  w.msRequestAnimationFrame ||
-  w.mozRequestAnimationFrame;
-main();
