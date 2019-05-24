@@ -92,6 +92,7 @@ class boss {
   collid2 = false;
   collide3 = false;
   change2 = true;
+  victory = false;
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -183,6 +184,7 @@ class boss {
       if (this.counter5 == 9) {
         this.framesCount = 2;
         this.counter5 = 0;
+        this.victory = true;
       }
 
       if (this.counter6 == 30) {
@@ -269,12 +271,14 @@ class boss {
 }
 var gameOver = new Image();
 gameOver.src = "./gameover.jpg";
+var Victory = new Image();
+Victory.src = "./victory2.jpg";
 let Boss = new boss(1000, 300);
 let Background = new background();
 var GameOver = false;
 var then = Date.now();
 var main = function() {
-  if (GameOver == false) {
+  if (GameOver == false && Boss.victory == false) {
     let now = Date.now();
     let delta = now - then;
 
@@ -302,6 +306,9 @@ var main = function() {
   }
   if (GameOver == true) {
     ctx.drawImage(gameOver, 0, 0, canvas.width, canvas.height);
+  }
+  if (Boss.victory == true) {
+    ctx.drawImage(Victory, 0, 0, canvas.width, canvas.height);
   }
   requestAnimationFrame(main);
 };
