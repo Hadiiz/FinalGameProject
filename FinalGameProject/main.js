@@ -40,8 +40,8 @@ addEventListener(
 let level1 = new Level1(ctx, canvas, keysDown);
 let level2 = new Level2(ctx, canvas, keysDown);
 
-let level = 2;
-audio.volume = 0.2;
+let level = 1;
+audio.volume = 0.4;
 let main = () => {
   if (level2.GameOver != true && level1.GameOver != true) {
     audio.play();
