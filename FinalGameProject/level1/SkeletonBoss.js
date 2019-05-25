@@ -23,7 +23,8 @@ class SkeletonBoss {
     this.bullet = [];
     this.deleted = [];
 
-    setInterval(this.shoot, 1000);
+    this.stop = false;
+    setInterval(this.shoot, 2000);
   }
 
   draw = () => {
@@ -83,38 +84,40 @@ class SkeletonBoss {
   };
 
   shoot = () => {
-    switch (this.framesCount) {
-      case 0:
-        this.hotSpotY = this.y + 122;
-        break;
-      case 1:
-        this.hotSpotY = this.y + 130;
-        break;
-      case 2:
-        this.hotSpotY = this.y + 122;
-        break;
-      case 3:
-        this.hotSpotY = this.y + 112;
-        break;
+    if (this.stop != true) {
+      switch (this.framesCount) {
+        case 0:
+          this.hotSpotY = this.y + 122;
+          break;
+        case 1:
+          this.hotSpotY = this.y + 130;
+          break;
+        case 2:
+          this.hotSpotY = this.y + 122;
+          break;
+        case 3:
+          this.hotSpotY = this.y + 112;
+          break;
+      }
+      this.ctx.fillStyle = "black";
+      this.ctx.fillRect(this.hotSpotX, this.hotSpotY, 15, 15);
+
+      this.ctx.strokeStyle = "aqua";
+      ctx.beginPath();
+      this.ctx.moveTo(this.hero.x + 120, this.hero.y + 40);
+      this.ctx.lineTo(this.hotSpotX, this.hotSpotY);
+      ctx.stroke();
+
+      let m =
+        (this.hotSpotY - (this.hero.y + 40)) /
+        (this.hotSpotX - (this.hero.x + 120));
+
+      let b = this.hotSpotY - m * this.hotSpotX;
+
+      this.bullet.push(
+        new SkeletonBossBullet(this.hotSpotX, this.hotSpotY, this.ctx, m, b)
+      );
     }
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(this.hotSpotX, this.hotSpotY, 15, 15);
-
-    this.ctx.strokeStyle = "aqua";
-    ctx.beginPath();
-    this.ctx.moveTo(this.hero.x + 120, this.hero.y + 40);
-    this.ctx.lineTo(this.hotSpotX, this.hotSpotY);
-    ctx.stroke();
-
-    let m =
-      (this.hotSpotY - (this.hero.y + 40)) /
-      (this.hotSpotX - (this.hero.x + 120));
-
-    let b = this.hotSpotY - m * this.hotSpotX;
-
-    this.bullet.push(
-      new SkeletonBossBullet(this.hotSpotX, this.hotSpotY, this.ctx, m, b)
-    );
   };
 
   update = () => {

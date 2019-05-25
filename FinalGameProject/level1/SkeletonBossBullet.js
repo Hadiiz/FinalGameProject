@@ -5,6 +5,9 @@ class SkeletonBossBullet {
     this.ctx = ctx;
     this.m = m;
     this.b = b;
+    this.sound = new Audio("audio/SkeletonBossBullet.mp3");
+    this.sound.play();
+    this.sound.volume = 0.1;
   }
 
   draw = () => {

@@ -3,7 +3,8 @@ class Level1 {
     this.ctx = ctx;
     this.canvas = canvas;
     this.keysDown = keysDown;
-    this.hero = new Hero(0, this.canvas.height - 200, this.ctx, 1);
+    this.hero = new Hero(0, this.canvas.height - 200, this.ctx, 1, this.canvas);
+
     this.skeletonBoss = new SkeletonBoss(
       this.canvas.width - 500,
       200,
@@ -20,14 +21,15 @@ class Level1 {
 
     this.background = new Image();
     this.background.src = "img/background.jpg";
-    this.background.onload = () => {
-      // main();
-    };
+    this.background.onload = () => {};
     this.gameOver = new Image();
     this.gameOver.src = "img/gameover.jpg";
     this.GameOver = false;
   }
 
+  stop = () => {
+    this.skeletonBoss.stop = true;
+  };
   main = () => {
     if (this.GameOver == false) {
       this.ctx.drawImage(this.background, 0, 0, canvas.width, canvas.height);
@@ -44,6 +46,7 @@ class Level1 {
       }
     }
     if (this.GameOver == true) {
+      this.stop();
       this.ctx.drawImage(this.gameOver, 0, 0, canvas.width, canvas.height);
     }
   };

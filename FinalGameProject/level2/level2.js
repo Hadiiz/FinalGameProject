@@ -27,9 +27,11 @@ class Level2 {
     this.deletearray = [];
     this.enemysprites = [];
     this.enemydeletearray = [];
-    this.hero = new Hero(0, this.canvas.height - 250, this.ctx, 2);
+    this.hero = new Hero(0, this.canvas.height - 250, this.ctx, 2, this.canvas);
     this.gameOver = new Image();
     this.gameOver.src = "img/gameover.jpg";
+    this.Victory = new Image();
+    this.Victory.src = "img/victory2.jpg";
     this.Boss = new boss(
       1000,
       300,
@@ -42,7 +44,7 @@ class Level2 {
     this.GameOver = false;
   }
   main = () => {
-    if (this.GameOver == false) {
+    if (this.GameOver == false && this.Boss.victory == false) {
       this.Background.draw();
       this.hero.draw();
       this.hero.update(this.keysDown);
@@ -74,5 +76,21 @@ class Level2 {
         this.canvas.height
       );
     }
+    if (this.Boss.victory == true) {
+      this.ctx.drawImage(
+        this.Victory,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+    }
+    //deleting unused sprites member
+    for (var j = 0; j < this.Boss.deletearray.length; j++) {
+      var indexof = this.Boss.sprites.indexOf(this.Boss.deletearray[j]);
+      this.Boss.sprites.splice(indexof, 1);
+    }
+    //emptying the delete array
+    this.Boss.deletearray = [];
   };
 }
